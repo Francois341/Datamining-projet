@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Food Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #e7e7e7;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(90deg, #3b5998, #8b9dc3);
+            color: #fff;
+            padding: 1.5rem 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .sidebar {
+            position: fixed;
+            top: 142px; /* Aligns exactly under the header */
+            left: -250px;
+            width: 250px;
+            height: calc(100% - 100px); /* Adjust height to fit below header */
+            background: #f4f4f9;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1100;
+        }
+        .sidebar a {
+            display: block;
+            color: #333;
+            padding: 15px 20px;
+            text-decoration: none;
+            margin: 5px 0;
+            font-weight: bold;
+            transition: background 0.3s, color 0.3s;
+        }
+        .sidebar a:hover {
+            background: #ddd;
+            color: #0056b3;
+            border-left: 4px solid #0056b3;
+        }
+        .content {
+            margin-left: 20px;
+            padding: 2rem;
+          /*  margin-top: calc(100%-142px); Adjusts content position */
+            transition: margin-left 0.3s ease;
+        }
+        .show-sidebar .sidebar {
+            left: 0;
+        }
+        .show-sidebar .content {
+            margin-left: 260px;
+        }
+        .menu-button {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(90deg,#3b5998,#3e5c9a);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 1200;
+        }
+        section {
+            background: #fff;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        section h2 {
+            color: #3b5998;
+            border-bottom: 2px solid #3b5998;
+            padding-bottom: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #f4f4f9;
+            color: #333;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+        footer p {
+            margin: 0;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-button" onclick="toggleSidebar()">Menu</button>
+    <header>
+        <h1>Interactive Food Production and Consumption Analysis</h1>
+    </header>
+    <div class="sidebar">
+        <a href="#section-a">Importing and Transforming the Data</a>
+        <a href="#section-b">Exploratory Data Analysis</a>
+        <a href="#section-c">Experiment and Algorithms</a>
+        <a href="#section-d">Insights and Conclusions</a>
+        <a href="#section-e">Photos and Documentation</a>
+    </div>
+    <br><br><br><br><br>
+    <div class="content">
+
+        <section id="section-a">
+            <h2>Importing and Transforming the Data</h2>
+            <ol >
+                <li><strong>Setup the dataset</strong></li>
+                <ul style="list-style:lower-latin">
+                    <li>Select on the website the whole set of data because we could not do it any other way.</li>
+                    <li>Delete by filtering the unnecessary rows in the “Element” column.</li>
+                    <li>Then split it in 2 dataset one with the population and one with the food.</li>
+                </ul>
+                <li><strong>Fix the columns and rows of dataset</strong></li>
+                <ul style="list-style:lower-latin">
+                    <li>Each of these elements were transformed into columns with a python script, which also removed the “Units” columns to allow data to be in the same row.</li>
+                    <li>Elements in first dataset: <I>Rural population, Total Population, Female Population, Male Population, Urban population</I>s</li>
+                    <li>Elements in second dataset: <I>Domestic supply quantity, Food supply quantity (kg/capita/yr), Production</I></li>
+                </ul>
+                <li><strong>Data Cleaning</strong></li>
+                <ul style="list-style:lower-latin">
+                    <li>Check for missing values or anomalies, also check if there are some negative values</li>
+                    <li>Standardize units and formats (e.g., ensure all quantities are in comparable units).</li>
+                </ul>
+                <li><strong>Feature Engineering</strong></li>
+                <ul style="list-style:lower-latin">
+                    <li>Calculate food production per capita.</li>
+                    <li>Compute year-over-year growth rates for production and food supply quantity (kg/capita/yr).
+                        <ul style="list-style:decimal">
+                            <li>Macro Level Analysis: <I>Domestic Supply Quantity</I></li>
+                            <li>Per Capita Analysis: <I>Food Supply Quantity</I></li>
+                        </ul>
+                    </li>   
+                </ul>
+                <li><strong>Visualization Setup</strong></li>
+                <ul style="list-style:lower-latin">
+                    <li>Use time-series plots for trends (e.g., food supply over years).</li>
+                    <li>Heatmaps for regional comparisons</li>
+                </ul>
+            </ol>
+        </section>
+
+        <section id="section-b">
+            <h2>Exploratory Data Analysis</h2>
+            <ol>
+                <li><strong>How does food production vary across different regions and food categories?</strong>
+                    <p>Food production varies significantly across regions. For example, countries like Afghanistan focus on cereals, while tropical countries excel in fruits and coffee production. Developed regions emphasize dairy and meat.</p>
+                    <div class="chart-container">
+                        <canvas id="regionChart"></canvas>
+                    </div>
+                </li>
+                <br>
+                <li><strong>Which countries have the highest or lowest food supply per capita?</strong>
+                    <p>Developed countries like the USA and Canada lead in food supply per capita, while countries in Sub-Saharan Africa face deficits.</p>
+                    <div class="chart-container">
+                        <canvas id="supplyChart"></canvas>
+                    </div>
+                    <br>
+                </li>
+                <li><strong>Is there a significant gap between domestic food production and population needs?</strong>
+                    <p>Regions like the Middle East rely heavily on imports, whereas North America produces surpluses.</p>
+                </li>
+                <br>
+                <li><strong>What is the trend of food consumption (kg/capita/year) over time for key food categories?</strong>
+                    <p>Trends indicate rising protein consumption in developing nations, while cereal consumption stabilizes in developed regions.</p>
+                    <div class="chart-container">
+                        <canvas id="consumptionChart"></canvas>
+                    </div>
+                    <br>
+                </li>
+                <br>
+                <li><strong>Are there correlations between population growth and food production or supply?</strong>
+                    <p>Fast-growing regions like Sub-Saharan Africa face challenges in aligning food production with population increases.</p>
+                </li>
+            </ol>
+
+            <script>
+                const regionCtx = document.getElementById('regionChart').getContext('2d');
+                const regionChart = new Chart(regionCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Cereals', 'Fruits', 'Dairy', 'Meat'],
+                        datasets: [
+                            {
+                                label: 'Production by Category',
+                                data: [40, 20, 25, 15],
+                                backgroundColor: [
+                                    'rgba(75, 192, 192, 0.5)',
+                                    'rgba(255, 159, 64, 0.5)',
+                                    'rgba(153, 102, 255, 0.5)',
+                                    'rgba(255, 99, 132, 0.5)'
+                                ],
+                                borderColor: [
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 99, 132, 1)'
+                                ],
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+
+                const supplyCtx = document.getElementById('supplyChart').getContext('2d');
+                const supplyChart = new Chart(supplyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['USA', 'Canada', 'India', 'Brazil', 'Afghanistan'],
+                        datasets: [
+                            {
+                                label: 'Food Supply Per Capita (kg/year)',
+                                data: [120, 100, 60, 80, 30],
+                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                const consumptionCtx = document.getElementById('consumptionChart').getContext('2d');
+                const consumptionChart = new Chart(consumptionCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2010', '2012', '2014', '2016', '2018', '2020'],
+                        datasets: [
+                            {
+                                label: 'Cereal Consumption (kg/capita/year)',
+                                data: [50, 55, 53, 52, 54, 56],
+                                borderColor: 'rgba(255, 206, 86, 1)',
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            </script>
+        </section>
+
+        <section id="section-c">
+            <h2>Experiment and Algorithms</h2>
+            <p>Explore the predictive power of algorithms by adjusting parameters in real-time.</p>
+        </section>
+
+        <section id="section-d">
+            <h2>Insights, Findings, and Conclusions</h2>
+            <p>Summarize key findings from the dataset.</p>
+        </section>
+
+        <section id="section-e">
+            <h2>Photos and Documentation</h2>
+            <p>Include relevant photos and documents as evidence or supplementary materials.</p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Food Analysis Project</p>
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            document.body.classList.toggle('show-sidebar');
+        }
+    </script>
+</body>
+</html>
